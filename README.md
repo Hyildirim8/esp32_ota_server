@@ -1,32 +1,109 @@
-# _Sample project_
+# ESP32 RGB LED Control Project
 
-(See the README.md file in the upper level 'examples' directory for more information about examples.)
+Bu proje ESP32 mikrodenetleyicisi kullanarak RGB LED kontrolü yapan bir ESP-IDF uygulamasıdır. WiFi bağlantı durumlarını farklı renklerle gösterir.
 
-This is the simplest buildable example. The example is used by command `idf.py create-project`
-that copies the project to user specified path and set it's name. For more information follow the [docs page](https://docs.espressif.com/projects/esp-idf/en/latest/api-guides/build-system.html#start-a-new-project)
+## Özellikler
 
+- **RGB LED Kontrolü**: PWM kullanarak RGB LED'in rengini kontrol eder
+- **WiFi Durum Göstergesi**: Farklı WiFi durumları için farklı renkler
+- **FreeRTOS Tabanlı**: Çoklu görev desteği ile çalışır
 
+## Donanım Gereksinimleri
 
-## How to use example
-We encourage the users to use the example as a template for the new projects.
-A recommended way is to follow the instructions on a [docs page](https://docs.espressif.com/projects/esp-idf/en/latest/api-guides/build-system.html#start-a-new-project).
+- ESP32 Development Board
+- RGB LED (Common Cathode)
+- 3x 220Ω Direnç
+- Breadboard ve jumper kablolar
 
-## Example folder contents
+## Pin Bağlantıları
 
-The project **sample_project** contains one source file in C language [main.c](main/main.c). The file is located in folder [main](main).
+| RGB LED | ESP32 GPIO |
+|---------|------------|
+| Red     | GPIO 21    |
+| Green   | GPIO 22    |
+| Blue    | GPIO 23    |
+| GND     | GND        |
 
-ESP-IDF projects are built using CMake. The project build configuration is contained in `CMakeLists.txt`
-files that provide set of directives and instructions describing the project's source files and targets
-(executable, library, or both). 
+## Renk Kodları
 
-Below is short explanation of remaining files in the project folder.
+| Durum | Renk | RGB Değeri |
+|-------|------|------------|
+| WiFi App Started | Magenta | (255, 102, 255) |
+| HTTP Server Started | Lime | (204, 255, 51) |
+| WiFi Connected | Cyan | (0, 255, 153) |
+
+## Proje Yapısı
 
 ```
 ├── CMakeLists.txt
-├── main
-│   ├── CMakeLists.txt
-│   └── main.c
-└── README.md                  This is the file you are currently reading
+├── main/
+│   ├── CMakeLists.txt
+│   ├── main.c              # Ana uygulama dosyası
+│   ├── rgb_led.c           # RGB LED kontrol fonksiyonları
+│   └── rgb_led.h           # RGB LED header dosyası
+├── .vscode/                # VS Code ayarları
+└── README.md
 ```
-Additionally, the sample project contains Makefile and component.mk files, used for the legacy Make based build system. 
-They are not used or needed when building with CMake and idf.py.
+
+## Kurulum ve Çalıştırma
+
+### Gereksinimler
+- ESP-IDF v4.4 veya üzeri
+- VS Code + ESP-IDF Extension (opsiyonel)
+
+### Adımlar
+
+1. **Projeyi klonlayın:**
+   ```bash
+   git clone <repository-url>
+   cd udemy_esp
+   ```
+
+2. **ESP-IDF ortamını kurun:**
+   ```bash
+   get_idf  # veya ESP-IDF kurulum yolunuzu source edin
+   ```
+
+3. **Projeyi derleyin:**
+   ```bash
+   idf.py build
+   ```
+
+4. **ESP32'ye yükleyin:**
+   ```bash
+   idf.py flash
+   ```
+
+5. **Seri monitörü başlatın:**
+   ```bash
+   idf.py monitor
+   ```
+
+## Kod Açıklaması
+
+### main.c
+- Ana uygulama döngüsü
+- RGB LED durumları arasında geçiş yapar
+- Her durum 1 saniye sürer
+
+### rgb_led.c/h
+- LEDC (LED Controller) kullanarak PWM sinyalleri üretir
+- RGB LED'in her renk kanalını ayrı ayrı kontrol eder
+- Farklı WiFi durumları için önceden tanımlanmış renkler
+
+## Geliştirme Notları
+
+- PWM frekansı: 100 Hz
+- Çözünürlük: 8-bit (0-255 değer aralığı)
+- Timer: LEDC_TIMER_0
+- Mod: High Speed Mode
+
+## Sorun Giderme
+
+1. **Derleme hatası**: `idf.py clean` ardından `idf.py build` deneyin
+2. **LED yanmıyor**: Pin bağlantılarını ve direnç değerlerini kontrol edin
+3. **Renkler doğru değil**: Common anode/cathode LED tipini kontrol edin
+
+## Lisans
+
+Bu proje MIT lisansı altında yayınlanmıştır.
