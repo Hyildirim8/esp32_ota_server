@@ -1,9 +1,4 @@
-/*
- * wifi_app.c
- *
- *  Created on: Oct 17, 2021
- *      Author: kjagu
- */
+
 
  #include "freertos/FreeRTOS.h"
  #include "freertos/event_groups.h"

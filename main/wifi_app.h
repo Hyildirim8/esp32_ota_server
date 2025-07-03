@@ -1,9 +1,4 @@
-/*
- * wifi_app.h
- *
- *  Created on: Oct 17, 2021
- *      Author: kjagu
- */
+
 
  #ifndef MAIN_WIFI_APP_H_
  #define MAIN_WIFI_APP_H_
